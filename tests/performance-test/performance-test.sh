@@ -4,18 +4,18 @@ set -e
 usage(){
     cat << ENDUSAGE
 Runs on the dev/CI machine to execute a performance test and abstracts between
-running collectd-tg (tg) or telemetry-bench (tb).
+running collectd, collectd-tg (tg) or telemetry-bench (tb).
 Requires:
   * oc tools pointing at your STF instance
   * gnu sed
 
-Usage: ./performance-test.sh -t <tg|tb> -c <intervals> -h <#hosts> -p <#plugins> -i <seconds> [-n <#concurrent>]
-  -t: Which tool to use ('tg' = collectd-tg, 'tb' = telemetry-bench (recommended))
-  -c: The number of intervals to run for
+Usage: ./performance-test.sh -t <collectd|tg|tb> -c <intervals> -h <#hosts> -p <#plugins> -i <seconds> [-n <#concurrent>]
+  -t: Which tool to use ('collectd' = collectd (OSP16-like config), 'tg' = collectd-tg, 'tb' = telemetry-bench)
+  -c: The number of intervals to run for (Not yet supported for collectd tool)
   -h: The number of hosts to simulate per batch
-  -p: The nuber of plugins to simulate per batch
-  -i: The (target) interval over which a message batch is sent
-  -n: The number of concurrent batches to run (telemetry-bench only)
+  -p: The nuber of plugins to simulate per batch (Not yet supported for collectd tool)
+  -i: The (target) interval over which a message batch is sent (Not yet supported for collectd tool)
+  -n: The number of concurrent batches to run (Not supported in collectd-tg)
 
 Delete: to cleanup all resources created by performance test in openshift, run
     ./performance-test.sh DELETE
@@ -199,6 +199,8 @@ done
 if [ "${TOOL}" = "tg" ]; then
     echo "Collectd-tg not implemented. Try running with '-t tb' instead"
     exit 1
+elif [ "${TOOL}" = "collectd" ]; then
+    :
 elif [ "${TOOL}" = "tb" ]; then
     :
 else
@@ -247,7 +249,11 @@ while true; do
                 printf "\n*** Creating performance test job ***\n"
                 export COUNT HOSTS PLUGINS INTERVAL CONCURRENT
                 cd deploy
-                ./performance-test-tb.sh
+		if [ "${TOOL}" = "collectd" ]; then
+                    ./performance-test-collectd.sh
+		elif [ "${TOOL}" = "tb" ]; then
+                    ./performance-test-tb.sh
+                fi
                 STAGE="TEST"
             fi
         ;;

@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <<PREFIX>>runner
+spec:
+  parallelism: 1
+  completions: 1
+spec:
+  template:
+    metadata:
+      labels:
+        app: stf-performance-test
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: performance-test
+        image: tripleomaster/centos-binary-collectd:current-tripleo-rdo
+        command:
+        - /collectd_perftest_entrypoint.sh
+        env:
+        - name: HOSTNAME
+          value: <<PREFIX>>collectd
+        - name: HOSTS
+          value: "<<HOSTS>>"
+        volumeMounts:
+        - name: collectd-config
+          mountPath: /etc/osp16ish-collectd.conf
+          subPath: osp16ish-collectd.conf
+        - name: entrypoint-script
+          mountPath: /collectd_perftest_entrypoint.sh
+          subPath: collectd_perftest_entrypoint.sh
+      volumes:
+      - name: collectd-config
+        configMap:
+          name: stf-perftest-collectd-config
+      - name: entrypoint-script
+        configMap:
+          name: stf-collectd-perftest-entrypoint-script
+          defaultMode: 0555
