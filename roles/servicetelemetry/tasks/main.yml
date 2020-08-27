@@ -28,6 +28,15 @@
   - not is_openshift
   - not is_k8s
 
+- name: Print some debug information
+  vars:
+    msg: |
+      ServiceTelemetry Variables
+      --------------------------------------------
+      {{ servicetelemetry_vars | to_nice_yaml }}
+  debug:
+    msg: "{{ msg.split('\n') }}"
+
 - name: Adjust defaults for HA
   when: high_availability_enabled
   set_fact:

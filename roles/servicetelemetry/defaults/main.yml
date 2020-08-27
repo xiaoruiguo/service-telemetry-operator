@@ -36,4 +36,13 @@ graphing_spec_config_auth_disable_signout_menu: false
 
 is_k8s: false
 is_openshift: false
+
+# defaults for user facing settings
+
+servicetelemetry_defaults:
+  observatorium:
+    bearer_token: ""
+    host: ""
+    tenant: ""
+
 # vim: set ft=yaml shiftwidth=2 tabstop=2 expandtab:

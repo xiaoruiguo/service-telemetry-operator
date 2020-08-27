@@ -1,2 +1,9 @@
 ---
 # vars file for servicetelemetry
+servicetelemetry_vars:
+  observatorium: |
+    {%- if observatorium is defined and observatorium is iterable -%}
+    {{ servicetelemetry_defaults.observatorium | combine((observatorium | stripnone), recursive=True) }}
+    {%- else -%}
+    {{ servicetelemetry_defaults.observatorium }}
+    {%- endif -%}

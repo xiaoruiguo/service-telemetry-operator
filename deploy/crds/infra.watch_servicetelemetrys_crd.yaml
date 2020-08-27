@@ -63,6 +63,18 @@ spec:
             prometheusPvcStorageRequest:
               description: PVC storage requested size for Prometheus
               type: string
+            observatorium:
+              description: Observatorium configuration properties
+              properties:
+                bearerToken:
+                  description: Bearer token for connecting to an Observatorium instance
+                  type: string
+                host:
+                  description: Resolvable host to Observatorium, e.g. observatorium.infra.watch
+                  type: string
+                tenant:
+                  description: Tenant name for connection to Observatorium. Used to construct connection URL.
+                  type: string
             alertmanagerStorageClass:
               description: Storage class name used for Alertmanager PVC
               type: string

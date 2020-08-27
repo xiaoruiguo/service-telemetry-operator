@@ -90,6 +90,18 @@ spec:
         path: prometheusPvcStorageRequest
         x-descriptors:
         - urn:alm:descriptor:tectonic.ui:text
+      - displayName: Observatorium configurations
+        description: Specifies the configuration for Observatorium storage domain
+        path: observatorium
+      - displayName: Bearer Token
+        description: Bearer token for authentication to the Observatorium API
+        path: observatorium.bearerToken
+      - displayName: Host
+        description: Domain name and port of the Observatorium instance
+        path: observatorium.host
+      - displayName: "Tenant"
+        description: Tenant name of the Observatorium instance. Used in URL generation.
+        path: observatorium.path
       statusDescriptors:
       - description: Conditions provided by deployment
         displayName: Conditions
