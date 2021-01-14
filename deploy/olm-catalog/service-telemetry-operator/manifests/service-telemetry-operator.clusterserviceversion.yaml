@@ -451,6 +451,21 @@ spec:
     mediatype: image/svg+xml
   install:
     spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - apiextensions.k8s.io
+          resourceNames:
+          - servicetelemetrys.infra.watch
+          - grafanadashboards.integreatly.org
+          - grafanadatasources.integreatly.org
+          - grafanas.integreatly.org
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - get
+          - list
+        serviceAccountName: service-telemetry-operator
       deployments:
       - name: service-telemetry-operator
         spec:
@@ -469,7 +484,7 @@ spec:
                 - /usr/local/bin/ao-logs
                 - /tmp/ansible-operator/runner
                 - stdout
-                image: quay.io/infrawatch/service-telemetry-operator:latest
+                image: image-registry.openshift-image-registry.svc:5000/service-telemetry/service-telemetry-operator:latest
                 imagePullPolicy: Always
                 name: ansible
                 resources: {}
@@ -492,7 +507,7 @@ spec:
                   value: explicit
                 - name: PROMETHEUS_WEBHOOK_SNMP_IMAGE
                   value: quay.io/infrawatch/prometheus-webhook-snmp:latest
-                image: quay.io/infrawatch/service-telemetry-operator:latest
+                image: image-registry.openshift-image-registry.svc:5000/service-telemetry/service-telemetry-operator:latest
                 imagePullPolicy: Always
                 name: operator
                 resources: {}

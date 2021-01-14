@@ -24,6 +24,26 @@
   - not is_openshift
   - not is_k8s
 
+- name: Check for servicetelemetrys.infra.watch
+  k8s_info:
+    name: servicetelemetrys.infra.watch
+    api_version: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+  register: _crd_servicetelemetry_infra_watch
+
+- debug:
+    var: _crd_servicetelemetry_infra_watch
+
+- name: Check for grafanas.integreatly.org
+  k8s_info:
+    name: grafanas.integreatly.org
+    api_version: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+  register: _crd_grafana_integreatly_org
+
+- debug:
+    var: _crd_grafana_integreatly_org
+
 - name: "Set supporting container image paths"
   set_fact:
     prometheus_webhook_snmp_container_image_path: "{{ lookup('env', 'PROMETHEUS_WEBHOOK_SNMP_IMAGE') | default('quay.io/infrawatch/prometheus-webhook-snmp:latest', true) }}" # noqa 204
